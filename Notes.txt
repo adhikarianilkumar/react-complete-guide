@@ -1,0 +1,85 @@
+Creating components in two different ways:
+
+1. Functional components (also referred to as "presentational", "dumb" or "stateless" components - more about this later in the course) => 
+const cmp = () => { 
+  return <div>some JSX</div> 
+} (using ES6 arrow functions as shown here is recommended but optional)
+
+props allow you to pass data from a parent (wrapping) component to a child (embedded) component.
+props usage:
+    props.name
+
+2. class-based components (also referred to as "containers", "smart" or "stateful" components) => 
+class Cmp extends Component { 
+  render () { 
+    return <div>some JSX</div> 
+  } 
+} 
+props usage:
+    this.props.name
+
+State simply is a property of the component class, you have to call it state  though - the name is not optional. You can then access it via this.state  in your class JSX code (which you return in the required render() method). Whenever state  changes (taught over the next lectures), the component will re-render and reflect the new state.
+
+Radium 
+  is popular react module which allows to write inline styles with Pseudo selectors and Media queries and it can be used in both class based and functional components.
+
+Styled-components 
+  allows to create react components with dynamically generated CSS classes but this works when I do not want to keep my styles seperate file and more organized.
+
+CSS Modules (Prefered)
+  allow to keep our styles in seperate file and helps to avoid naming clashes. To enable CSS modules for 'react-scrpts: "1.x.x"' follow below steps
+  1. Stop your NPM server and run npm eject(this will create config folder and modify your pakage.json)
+  2. Look for "test: /\.css$/" in both webpack.config.dev.js and webpack.config.prod.js and add below options to css-loader (loader: require.resolve('css-loader'))  
+    modules: true,
+    localIdentName: '[name]__[local]__[hash:base64:5]'
+  3. Run npm start
+  4. Do "import chooseNameOfYourChoice from './path_to_css_file';" and chooseNameOfYourChoice is an object and has all CSS styles from the imported file 
+
+  Note: For 'react-scrpts: "2.x.x"' and higher
+    1. Do not run "npm eject"
+    2. Just rename css file as filename.module.css 
+    3. Do "import chooseNameOfYourChoice from './path_to_css_file';" and chooseNameOfYourChoice is an object and has all CSS styles from the imported file 
+
+Component Lifecycle - Create
+ using Lifecycle Hooks (NOT React Hooks) and available in class based components only. Order of the Lifecycle Hooks executions as below
+  1. constructor(props) is defaul ES6 class feature
+    Call super(props) and also you can set your state (this.state = {})
+    DO: Set up state
+    Don't: Cause Side-Effects
+  2. getDerivedStateFromProps(props, state)
+    is static method and not used more often
+    DO: Sync State
+    Don't: Cause Side-Effects
+  3. render()
+    Prepare and structure your JSX Code
+  4. Render Child Components
+  5. componentDidMount()
+    DO: Cause Side-Effects
+    DON'T: Update State(trigger re-render)
+
+Component Lifecycle - Update
+  1. getDerivedStateFromProps(props, state)
+    is static method, not used more often and this is not eligant way of updating
+    DO: Sync State
+    Don't: Cause Side-Effects
+  2. shouldComponentUpdate(nextProps, nextState)
+    May cancel update
+    DO: Decide whether to continue or not
+    DON'T: Cause Side-Effects
+  3. render()
+    Prepare and structure your JSX Code
+  4. Update Child Components
+  5. getSnapshotBeforeUpdate(prevProps, prevState()
+    DO: Last minute DOM update
+    DON'T: Cause Side-Effects
+  6. componentDidMount()
+    DO: Cause Side-Effects
+    DON'T: Update State(trigger re-render)
+
+React Hooks to achieve Component Lifecycle in functional components(Example CockPit.js) 
+
+Higher Order Component (HOC) is useful to create wrapper element, Error handling, Google analytics etc...
+
+Prop-types are used to restrict type of value that component can accept and it is useful when you distribute your component or NPM package.
+
+refs don't replace IDs. It's just the "React way" of getting access to DOM elements.
